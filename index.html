@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>travla_cafe | Cybersecurity Training, Nairobi</title>
+<meta name="description" content="Hands-on cybersecurity training in Nairobi: in-person classes, live Zoom sessions and secure pre-recorded modules.">
+<style>
+/* ========== DESIGN TOKENS ========== */
+:root{
+  --bg:#050806; --panel:#0a120c; --line:#14391f;
+  --green:#39ff7a; --green-dim:#27b858; --muted:#6fae83; --warn:#ffcc4d; --err:#ff5c5c;
+  --font:"JetBrains Mono","Fira Code","Cascadia Code",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--green);font-family:var(--font);line-height:1.6;font-size:15px;
+  /* subtle scanlines */
+  background-image:repeating-linear-gradient(0deg,rgba(57,255,122,.03) 0 1px,transparent 1px 3px)}
+a{color:var(--green)}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+section{padding:48px 0;border-top:1px dashed var(--line)}
+h2{font-size:1.35rem;margin-bottom:6px}
+h2::before{content:"$ ";color:var(--green-dim)}
+.sub{color:var(--muted);margin-bottom:24px;max-width:70ch}
+
+/* ========== HEADER ========== */
+header{padding:20px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(5,8,6,.95);z-index:10}
+header .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between}
+.brand{font-size:1.5rem;font-weight:700;text-shadow:0 0 12px rgba(57,255,122,.6)}
+.cursor{display:inline-block;width:.6ch;background:var(--green);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.contact{display:flex;flex-wrap:wrap;gap:4px 20px;font-size:.9rem}
+.contact a{text-decoration:none;color:var(--muted)}
+.contact a:hover{color:var(--green)}
+
+/* ========== HERO ========== */
+.hero{padding:56px 0 40px}
+.hero h1{font-size:clamp(1.6rem,5vw,2.6rem);line-height:1.2;margin-bottom:14px;min-height:2.4em}
+.hero p{color:var(--muted);max-width:60ch;margin-bottom:22px}
+.btn{display:inline-block;font:inherit;background:transparent;color:var(--green);border:1px solid var(--green);
+  padding:10px 20px;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--green);color:var(--bg)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ========== PRICING ========== */
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);padding:22px;display:flex;flex-direction:column;gap:10px}
+.card:hover{border-color:var(--green-dim)}
+.card h3{font-size:1.05rem}
+.price{font-size:1.7rem;font-weight:700}
+.price small{font-size:.8rem;color:var(--muted);font-weight:400}
+.card ul{list-style:none;color:var(--muted);font-size:.9rem}
+.card li::before{content:"> ";color:var(--green-dim)}
+
+/* ========== ZOOM PROTOCOL ========== */
+.steps{list-style:none;counter-reset:s;display:grid;gap:12px}
+.steps li{counter-increment:s;background:var(--panel);border-left:3px solid var(--green);padding:14px 16px}
+.steps li::before{content:"step_" counter(s) ": ";color:var(--green-dim);font-weight:700}
+.notice{margin-top:18px;border:1px solid var(--warn);color:var(--warn);padding:12px 16px;font-size:.9rem}
+
+/* ========== FORMS ========== */
+form,.panel{background:var(--panel);border:1px solid var(--line);padding:24px;display:grid;gap:16px;max-width:640px}
+label{display:grid;gap:6px;font-size:.9rem}
+input,select{font:inherit;background:var(--bg);color:var(--green);border:1px solid var(--line);padding:10px;width:100%}
+input::placeholder{color:#3f7a54}
+input:focus,select:focus{border-color:var(--green)}
+.err{color:var(--err);font-size:.8rem;min-height:1em}
+select option{background:var(--bg)}
+
+/* payment instruction output */
+#payment{display:none;margin-top:22px;max-width:640px;border:1px solid var(--green);padding:20px;background:var(--panel);
+  box-shadow:0 0 18px rgba(57,255,122,.15)}
+#payment h3{margin-bottom:10px}
+#payment ol{margin:10px 0 0 20px}
+#payment .ref{color:var(--warn)}
+
+/* ========== ADMIN ========== */
+.badge{display:inline-block;border:1px solid var(--warn);color:var(--warn);padding:2px 8px;font-size:.75rem;margin-bottom:12px}
+.queue{list-style:none;display:grid;gap:6px;font-size:.88rem}
+.queue li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dotted var(--line);padding:4px 0}
+.queue button{background:none;border:0;color:var(--err);font:inherit;cursor:pointer}
+.meter{height:6px;background:var(--bg);border:1px solid var(--line)}
+.meter span{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
+#adminPanel{display:none}
+
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:.85rem;text-align:center}
+@media (prefers-reduced-motion:reduce){.cursor{animation:none}html{scroll-behavior:auto}.meter span{transition:none}}
+</style>
+</head>
+<body>
+
+<!-- ========== 1. HEADER ========== -->
+<header>
+  <div class="wrap">
+    <div class="brand">travla_cafe<span class="cursor">&nbsp;</span></div>
+    <div class="contact">
+      <a href="tel:+254703830466">+254 703 830 466</a>
+      <a href="mailto:obimikaelmichael@gmail.com">obimikaelmichael@gmail.com</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Hero: typed headline (JS) -->
+  <div class="hero">
+    <h1 id="typed" aria-label="Learn to break it. Learn to defend it.">&nbsp;</h1>
+    <p>Practical cybersecurity training from Nairobi, Kenya. Learn in a room, live on Zoom, or on your own schedule with secure recorded modules.</p>
+    <a class="btn" href="#reserve">Reserve a seat</a>
+  </div>
+
+  <!-- ========== 2. TRAINING VECTORS & PRICING ========== -->
+  <section id="vectors">
+    <h2>training_vectors</h2>
+    <p class="sub">Pick the format that fits your schedule. All prices are in Kenyan shillings (KES).</p>
+    <div class="grid">
+      <article class="card">
+        <h3>In-Person Practical Classes</h3>
+        <div class="price">KES 2,000 <small>/ physical session</small></div>
+        <ul><li>Nairobi HQ</li><li>Hands-on lab work</li></ul>
+      </article>
+      <article class="card">
+        <h3>Live Zoom Sessions</h3>
+        <div class="price">KES 1,500 <small>/ live session</small></div>
+        <ul><li>Synchronous, instructor-led</li><li>Strict pre-scheduled timetable</li><li>Email-verified link after payment</li></ul>
+      </article>
+      <article class="card">
+        <h3>Secure Pre-Recorded Modules</h3>
+        <div class="price">KES 800 <small>/ module</small></div>
+        <ul><li>Asynchronous, learn any time</li><li>Max 3 comprehensive videos per module</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========== 3. ZOOM PROTOCOL ========== -->
+  <section id="zoom">
+    <h2>zoom_protocol</h2>
+    <p class="sub">Live sessions run on a fixed timetable. Here is exactly how access works.</p>
+    <ol class="steps">
+      <li>Sessions follow a strict pre-scheduled timetable. We do not add or move sessions on request.</li>
+      <li>Reserve your session with the form below and pay via M-PESA Till.</li>
+      <li>We confirm your payment manually, then email you a verified Zoom link.</li>
+      <li>The link goes only to the email you registered. Do not share it.</li>
+      <li>Join on time. Sessions start at the scheduled hour.</li>
+    </ol>
+    <div class="notice">No payment, no link. Check your spam folder if the email does not arrive; contact us if it is still missing.</div>
+  </section>
+
+  <!-- ========== 4. ONBOARDING & RESERVATION ========== -->
+  <section id="reserve">
+    <h2>secure_onboarding</h2>
+    <p class="sub">Fill in your details and choose a vector. Payment instructions appear after you submit.</p>
+
+    <form id="reserveForm" novalidate>
+      <label>Full name
+        <input id="fullName" type="text" autocomplete="name" placeholder="Jane Wanjiku" required>
+        <span class="err" data-for="fullName"></span>
+      </label>
+      <label>Email
+        <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <span class="err" data-for="email"></span>
+      </label>
+      <label>Phone (E.164 format)
+        <input id="phone" type="tel" autocomplete="tel" placeholder="+254703830466" required>
+        <span class="err" data-for="phone"></span>
+      </label>
+      <label>Training vector
+        <select id="vector" required>
+          <option value="">Select a vector</option>
+          <option value="inperson">In-Person Practical Class (KES 2,000)</option>
+          <option value="zoom">Live Zoom Session (KES 1,500)</option>
+          <option value="module">Pre-Recorded Module (KES 800)</option>
+        </select>
+        <span class="err" data-for="vector"></span>
+      </label>
+      <button class="btn" type="submit">Reserve and show payment steps</button>
+    </form>
+
+    <!-- Payment instructions, filled in by JS -->
+    <div id="payment" role="status" aria-live="polite"></div>
+  </section>
+
+  <!-- ========== 5. ADMIN / OPERATOR AREA (MOCK) ========== -->
+  <section id="admin">
+    <h2>operator_console</h2>
+    <p class="sub">Placeholder interface for uploading new modules. Nothing is sent to a server.</p>
+    <span class="badge">MOCK UI</span>
+
+    <!-- Placeholder login gate. Client-side only, so it is NOT security.
+         Replace with real server-side authentication before going live. -->
+    <form id="adminLogin" novalidate>
+      <label>Operator passcode (demo: any value)
+        <input id="passcode" type="password" autocomplete="off" placeholder="••••••••">
+      </label>
+      <button class="btn" type="submit">Unlock console</button>
+    </form>
+
+    <div class="panel" id="adminPanel">
+      <label>Module title
+        <input id="modTitle" type="text" placeholder="Module 4: Network Reconnaissance">
+      </label>
+      <label>Videos (max 3, MP4 / WebM)
+        <input id="modFiles" type="file" accept="video/mp4,video/webm" multiple>
+      </label>
+      <div class="meter" aria-hidden="true"><span id="meterFill"></span></div>
+      <div class="err" id="adminMsg" role="alert"></div>
+      <ul class="queue" id="queue"></ul>
+      <button class="btn" id="publishBtn" type="button" disabled>Publish module (mock)</button>
+    </div>
+  </section>
+</main>
+
+<footer>travla_cafe · Nairobi, Kenya · <a href="mailto:obimikaelmichael@gmail.com">obimikaelmichael@gmail.com</a></footer>
+
+<script>
+/* ========== CONFIG: edit these before deploying ========== */
+const CONFIG = {
+  // TODO: replace with your real M-PESA Till number
+  tillNumber: "YOUR_TILL_NUMBER",
+  businessName: "travla_cafe",
+  maxVideosPerModule: 3
+};
+
+const VECTORS = {
+  inperson: { label: "In-Person Practical Class (Nairobi HQ)", price: 2000 },
+  zoom:     { label: "Live Zoom Session", price: 1500 },
+  module:   { label: "Secure Pre-Recorded Module", price: 800 }
+};
+
+/* ========== HERO TYPING EFFECT ========== */
+(function typeHeadline(){
+  const el = document.getElementById("typed");
+  const text = "Learn to break it. Learn to defend it.";
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches){ el.textContent = text; return; }
+  el.textContent = "";
+  let i = 0;
+  const t = setInterval(() => {
+    el.textContent += text[i++];
+    if (i >= text.length) clearInterval(t);
+  }, 45);
+})();
+
+/* ========== RESERVATION FORM ========== */
+const form = document.getElementById("reserveForm");
+const payBox = document.getElementById("payment");
+
+// Show or clear an error message under a field
+function setErr(id, msg){ form.querySelector('[data-for="'+id+'"]').textContent = msg; return !msg; }
+
+// Escape user input before inserting into HTML (prevents XSS)
+function esc(s){ const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+// Short reference the learner types into the M-PESA account field
+function makeRef(){ return "TC" + Date.now().toString(36).toUpperCase().slice(-6); }
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const name = form.fullName.value.trim();
+  const email = form.email.value.trim();
+  const phone = form.phone.value.trim();
+  const v = form.vector.value;
+
+  // Validate every field (non-short-circuit so all errors show at once)
+  const ok = [
+    setErr("fullName", name.length >= 2 ? "" : "Enter your full name."),
+    setErr("email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? "" : "Enter a valid email address."),
+    // E.164: + then country code (1-9) then up to 14 more digits, no spaces
+    setErr("phone", /^\+[1-9]\d{7,14}$/.test(phone) ? "" : "Use E.164 format, e.g. +254703830466 (no spaces)."),
+    setErr("vector", VECTORS[v] ? "" : "Choose a training vector.")
+  ].every(Boolean);
+  if (!ok) return;
+
+  const sel = VECTORS[v];
+  const ref = makeRef();
+  const zoomLine = v === "zoom"
+    ? "<li>Your Zoom link will be emailed to <strong>"+esc(email)+"</strong> only after we verify payment.</li>"
+    : "<li>We will contact you on <strong>"+esc(phone)+"</strong> or "+esc(email)+" to confirm your schedule.</li>";
+
+  // Manual M-PESA Till instructions
+  payBox.innerHTML =
+    "<h3>Reservation received, "+esc(name)+"</h3>" +
+    "<p>"+esc(sel.label)+": <strong>KES "+sel.price.toLocaleString("en-KE")+"</strong></p>" +
+    "<ol>" +
+      "<li>Open M-PESA on your phone and choose <strong>Lipa na M-PESA</strong>, then <strong>Buy Goods and Services</strong>.</li>" +
+      "<li>Enter Till Number: <strong>"+esc(CONFIG.tillNumber)+"</strong> ("+esc(CONFIG.businessName)+").</li>" +
+      "<li>Enter amount: <strong>KES "+sel.price.toLocaleString("en-KE")+"</strong>, then your M-PESA PIN.</li>" +
+      "<li>Email the M-PESA confirmation message and your reference <span class='ref'>"+ref+"</span> to <a href='mailto:obimikaelmichael@gmail.com?subject=Payment%20"+ref+"'>obimikaelmichael@gmail.com</a>.</li>" +
+      zoomLine +
+    "</ol>";
+  payBox.style.display = "block";
+  payBox.scrollIntoView({behavior:"smooth", block:"nearest"});
+
+  // NOTE: this page has no backend. To store reservations, POST the data
+  // to your own server or a form service here.
+});
+
+/* ========== OPERATOR CONSOLE (MOCK) ========== */
+const login = document.getElementById("adminLogin");
+const panel = document.getElementById("adminPanel");
+const files = document.getElementById("modFiles");
+const msg = document.getElementById("adminMsg");
+const queue = document.getElementById("queue");
+const publishBtn = document.getElementById("publishBtn");
+const meter = document.getElementById("meterFill");
+let selected = []; // in-memory list of chosen video File objects
+
+login.addEventListener("submit", e => {
+  e.preventDefault();
+  login.style.display = "none";
+  panel.style.display = "grid";
+});
+
+// Re-draw the queue and the 3-video meter
+function renderQueue(){
+  queue.innerHTML = "";
+  selected.forEach((f, idx) => {
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    span.textContent = f.name + " (" + (f.size/1048576).toFixed(1) + " MB)";
+    const rm = document.createElement("button");
+    rm.type = "button"; rm.textContent = "remove";
+    rm.onclick = () => { selected.splice(idx,1); renderQueue(); };
+    li.append(span, rm);
+    queue.appendChild(li);
+  });
+  meter.style.width = (selected.length / CONFIG.maxVideosPerModule * 100) + "%";
+  publishBtn.disabled = selected.length === 0;
+}
+
+files.addEventListener("change", () => {
+  msg.textContent = "";
+  for (const f of files.files){
+    if (selected.length >= CONFIG.maxVideosPerModule){
+      msg.textContent = "Limit reached: a module holds at most " + CONFIG.maxVideosPerModule + " videos. Extra files were skipped.";
+      break;
+    }
+    selected.push(f);
+  }
+  files.value = ""; // allow re-picking the same file
+  renderQueue();
+});
+
+publishBtn.addEventListener("click", () => {
+  const title = document.getElementById("modTitle").value.trim();
+  if (!title){ msg.textContent = "Enter a module title before publishing."; return; }
+  msg.style.color = "var(--green)";
+  msg.textContent = "Mock publish: \"" + title + "\" with " + selected.length + " video(s). Connect a real backend to store files.";
+  selected = []; renderQueue();
+  setTimeout(() => { msg.style.color = ""; }, 4000);
+});
+</script>
+</body>
+</html>
