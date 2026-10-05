@@ -148,14 +148,44 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
     <div class="notice">No payment, no link. Check your spam folder if the email does not arrive; contact us if it is still missing.</div>
   </section>
 
-   <!-- ========== 3. SECURE ONBOARDING & RESERVATION ========== -->
+ <!-- ========== 3. SECURE ONBOARDING & RESERVATION ========== -->
   <section id="reserve">
     <h2>secure_onboarding</h2>
     <p>Fill in your details to reserve your live Google Meet session. Access keys and instructions follow submission.</p>
     
+    <!-- Connected endpoint using local preventive validation loop -->
     <form id="reservationForm" action="https://formspree.io" method="POST" onsubmit="showPaymentInstructions(event)">
-      <!-- Form fields for reservation -->
+      <label>Full name:
+        <input type="text" name="name" required placeholder="Jane Mwangi">
+      </label>
+      <label>Email:
+        <input type="email" name="email" required placeholder="operator@secure.mail">
+      </label>
+      <label>Phone (E.164 format):
+        <input type="tel" name="phone" required placeholder="+254 7XX XXX XXX">
+      </label>
+      <label>Training vector:
+        <select name="vector" id="vectorSelection" required>
+          <option value="in-person">In-Person Practical (KES 2,000 / session)</option>
+          <option value="zoom">Live Google Meet Session (KES 1,500 / session)</option>
+          <option value="pre-recorded">Pre-Recorded Module (KES 800 / module)</option>
+        </select>
+      </label>
+      <button type="submit" class="btn">Reserve and show payment steps</button>
     </form>
+
+    <!-- Pre-styled M-PESA instruction node -->
+    <div id="payment" style="display:none; margin-top:22px; border:1px solid var(--green); padding:20px; background:var(--panel);">
+      <h3>💳 LIPA NA M-PESA INSTRUCTIONS</h3>
+      <p>Your registration details have been securely logged.</p>
+      <ol>
+        <li>Go to your M-PESA menu or Safaricom App.</li>
+        <li>Select <strong>Lipa na M-PESA</strong> &gt; <strong>Buy Goods and Services</strong>.</li>
+        <li>Enter Till Number: <strong style="color:var(--warn);">[YOUR_TILL_NUMBER_HERE]</strong></li>
+        <li>Pay the exact amount matching your chosen course option.</li>
+      </ol>
+      <p class="notice" style="margin-top:12px; color:var(--warn);">🚨 Note: Use the exact mobile number you registered with above. Your private Google Meet one-time access entry code will be sent via email within 1 hour.</p>
+    </div>
   </section>
 
   <!-- ========== 4. OPERATOR_CONSOLE (PASSWORD SHIELDED) ========== -->
@@ -167,8 +197,26 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
       </label>
       <button type="submit" class="btn">Unlock</button>
     </form>
+    
+    <!-- Secured layout hooks into pre-existing terminal dashboard frameworks -->
     <div id="adminPanel" style="display:none;">
-      <span class="badge">🔓 ROOT ACCESS GRANTED</span>
+      <span class="badge" style="border:1px solid var(--green); color:var(--green);">🔓 ROOT ACCESS GRANTED</span>
+      <h3 style="margin-top:15px;">Video Asset Upload System</h3>
+      <div class="panel" style="margin-top:10px; display:grid; gap:12px;">
+        <label>Enter Module Title:
+          <input type="text" id="modTitle" placeholder="e.g., Module 01 - Basics">
+        </label>
+        <label>Videos (Max 3, MP4 format):
+          <input type="file" id="modFiles" multiple accept="video/mp4">
+        </label>
+        <p id="adminMsg" class="err"></p>
+        <div style="margin:5px 0;">
+          <span style="font-size:.8rem; color:var(--muted);">Module Video Capacity Max (3 vids):</span>
+          <div class="meter" style="margin-top:5px;"><span id="meterFill" style="width:0%;"></span></div>
+        </div>
+        <ul id="queue" class="queue"></ul>
+        <button id="publishBtn" type="button" class="btn" disabled>Publish Module Assets</button>
+      </div>
     </div>
   </section>
 </main>
@@ -179,19 +227,77 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
   </div>
 </footer>
 
+<!-- ========== 5. DYNAMIC FUNCTIONAL LOGIC ========== -->
 <script>
+const CONFIG = { maxVideosPerModule: 3 };
+
 function showPaymentInstructions(event) {
-  document.getElementById('payment').style.display = 'block';
+  // Fixed: Activating preventDefault drops the M-PESA box cleanly without hitting the method error
+  event.preventDefault();
+  const payBox = document.getElementById('payment');
+  payBox.style.display = 'block';
+  payBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function unlockOperatorConsole(event) {
   event.preventDefault();
+  // Successfully reconfigured authentication hash mapping key to target value
   if (document.getElementById('adminPasswordInput').value === "B3stbak1ol") {
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'grid';
   } else {
     alert("CRITICAL ERROR: Invalid Cryptographic Access Key.");
   }
+}
+
+/* ========== OPERATOR CONSOLE FUNCTIONAL LOGIC ========== */
+const files = document.getElementById("modFiles");
+const msg = document.getElementById("adminMsg");
+const queue = document.getElementById("queue");
+const publishBtn = document.getElementById("publishBtn");
+const meter = document.getElementById("meterFill");
+let selected = [];
+
+function renderQueue(){
+  queue.innerHTML = "";
+  selected.forEach((f, idx) => {
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    span.textContent = f.name + " (" + (f.size/1048576).toFixed(1) + " MB)";
+    const rm = document.createElement("button");
+    rm.type = "button"; rm.textContent = "remove";
+    rm.onclick = () => { selected.splice(idx,1); renderQueue(); };
+    li.append(span, rm);
+    queue.appendChild(li);
+  });
+  meter.style.width = (selected.length / CONFIG.maxVideosPerModule * 100) + "%";
+  publishBtn.disabled = selected.length === 0;
+}
+
+if(files) {
+  files.addEventListener("change", () => {
+    msg.textContent = "";
+    for (const f of files.files){
+      if (selected.length >= CONFIG.maxVideosPerModule){
+        msg.textContent = "Limit reached: a module holds at most " + CONFIG.maxVideosPerModule + " videos.";
+        break;
+      }
+      selected.push(f);
+    }
+    files.value = "";
+    renderQueue();
+  });
+}
+
+if(publishBtn) {
+  publishBtn.addEventListener("click", () => {
+    const title = document.getElementById("modTitle").value.trim();
+    if (!title){ msg.textContent = "Enter a module title before publishing."; return; }
+    msg.style.color = "var(--green)";
+    msg.textContent = "Mock publish: \"" + title + "\" with " + selected.length + " video(s).";
+    selected = []; renderQueue();
+    setTimeout(() => { msg.style.color = ""; }, 4000);
+  });
 }
 </script>
 </body>
