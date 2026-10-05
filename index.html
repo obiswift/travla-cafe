@@ -148,15 +148,16 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
     <div class="notice">No payment, no link. Check your spam folder if the email does not arrive; contact us if it is still missing.</div>
   </section>
 
- <!-- ========== 3. SECURE ONBOARDING & RESERVATION ========== -->
+  <!-- ========== 4. ONBOARDING & RESERVATION ========== -->
+   <!-- ========== 3. SECURE ONBOARDING & RESERVATION ========== -->
   <section id="reserve">
     <h2>secure_onboarding</h2>
-    <p>Fill in your details to reserve your live Google Meet session. Access keys and instructions follow submission.</p>
+    <p>Fill in your details and choose a vector. Payment instructions appear after you submit.</p>
     
-    <!-- Connected endpoint using local preventive validation loop -->
+    <!-- Active Formspree backend link to save data straight to your email dashboard -->
     <form id="reservationForm" action="https://formspree.io" method="POST" onsubmit="showPaymentInstructions(event)">
       <label>Full name:
-        <input type="text" name="name" required placeholder="Jane Mwangi">
+        <input type="text" name="name" required placeholder="John Doe">
       </label>
       <label>Email:
         <input type="email" name="email" required placeholder="operator@secure.mail">
@@ -167,15 +168,15 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
       <label>Training vector:
         <select name="vector" id="vectorSelection" required>
           <option value="in-person">In-Person Practical (KES 2,000 / session)</option>
-          <option value="zoom">Live Google Meet Session (KES 1,500 / session)</option>
+          <option value="zoom">Live Zoom Session (KES 1,500 / session)</option>
           <option value="pre-recorded">Pre-Recorded Module (KES 800 / module)</option>
         </select>
       </label>
       <button type="submit" class="btn">Reserve and show payment steps</button>
     </form>
 
-    <!-- Pre-styled M-PESA instruction node -->
-    <div id="payment" style="display:none; margin-top:22px; border:1px solid var(--green); padding:20px; background:var(--panel);">
+    <!-- Pre-styled M-PESA payment notification layer -->
+    <div id="payment" style="display:none;">
       <h3>💳 LIPA NA M-PESA INSTRUCTIONS</h3>
       <p>Your registration details have been securely logged.</p>
       <ol>
@@ -184,41 +185,48 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
         <li>Enter Till Number: <strong style="color:var(--warn);">[YOUR_TILL_NUMBER_HERE]</strong></li>
         <li>Pay the exact amount matching your chosen course option.</li>
       </ol>
-      <p class="notice" style="margin-top:12px; color:var(--warn);">🚨 Note: Use the exact mobile number you registered with above. Your private Google Meet one-time access entry code will be sent via email within 1 hour.</p>
+      <p class="notice">🚨 Note: Use the exact mobile number you registered with above. Your verified access code/schedule will be sent via email within 1 hour.</p>
     </div>
   </section>
 
   <!-- ========== 4. OPERATOR_CONSOLE (PASSWORD SHIELDED) ========== -->
   <section id="admin" style="margin-top:60px; border-top:1px dashed var(--line); padding-top:40px;">
     <h2>operator_console</h2>
-    <form id="adminLogin" onsubmit="unlockOperatorConsole(event)">
-      <label>Enter Access Key:
-        <input type="password" id="adminPasswordInput" placeholder="••••••••••••" required>
-      </label>
-      <button type="submit" class="btn">Unlock</button>
-    </form>
     
-    <!-- Secured layout hooks into pre-existing terminal dashboard frameworks -->
+    <!-- Login interface shield -->
+    <form id="adminLogin" onsubmit="unlockOperatorConsole(event)">
+      <p class="ref" style="color:var(--err); margin-bottom:10px;">⚠️ RESTRICTED AREA: OPERATOR AUTHENTICATION REQUIRED</p>
+      <label>Enter Access Key:
+        <input type="password" id="adminPasswordInput" placeholder="••••••••••••" style="max-width:300px; display:inline-block; margin-right:10px;" required>
+      </label>
+      <button type="submit" class="btn" style="padding:10px 20px;">Unlock</button>
+    </form>
+
+    <!-- System Console Panel: Hooks perfectly into your pre-existing page style elements -->
     <div id="adminPanel" style="display:none;">
-      <span class="badge" style="border:1px solid var(--green); color:var(--green);">🔓 ROOT ACCESS GRANTED</span>
-      <h3 style="margin-top:15px;">Video Asset Upload System</h3>
-      <div class="panel" style="margin-top:10px; display:grid; gap:12px;">
+      <span class="badge">🔓 ROOT ACCESS GRANTED</span>
+      <h3>Video Asset Upload System</h3>
+      <div class="panel" style="margin-top:15px;">
         <label>Enter Module Title:
-          <input type="text" id="modTitle" placeholder="e.g., Module 01 - Basics">
+          <input type="text" id="modTitle" placeholder="e.g., Module 01 - Basics" required>
         </label>
         <label>Videos (Max 3, MP4 format):
           <input type="file" id="modFiles" multiple accept="video/mp4">
         </label>
-        <p id="adminMsg" class="err"></p>
-        <div style="margin:5px 0;">
-          <span style="font-size:.8rem; color:var(--muted);">Module Video Capacity Max (3 vids):</span>
+        
+        <p id="adminMsg" class="err" style="color:var(--warn); min-height:1.2em;"></p>
+        
+        <div style="margin:10px 0;">
+          <span style="font-size:0.85rem; color:var(--muted);">Module Video Capacity Max (3 vids):</span>
           <div class="meter" style="margin-top:5px;"><span id="meterFill" style="width:0%;"></span></div>
         </div>
+
         <ul id="queue" class="queue"></ul>
         <button id="publishBtn" type="button" class="btn" disabled>Publish Module Assets</button>
       </div>
     </div>
   </section>
+
 </main>
 
 <footer>
@@ -231,18 +239,22 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 <script>
 const CONFIG = { maxVideosPerModule: 3 };
 
+// Open M-PESA box on payment submission
 function showPaymentInstructions(event) {
-  // Fixed: Activating preventDefault drops the M-PESA box cleanly without hitting the method error
-  event.preventDefault();
+  // If you want to test the checkout loop visuals locally without running form servers, uncomment the next line:
+  // event.preventDefault();
   const payBox = document.getElementById('payment');
   payBox.style.display = 'block';
   payBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// Security Gatekeeper logic protecting your core upload node
 function unlockOperatorConsole(event) {
   event.preventDefault();
-  // Successfully reconfigured authentication hash mapping key to target value
-  if (document.getElementById('adminPasswordInput').value === "B3stbak1ol") {
+  const secretKey = document.getElementById('adminPasswordInput').value;
+  
+  // Your private operational key passphrase
+  if (secretKey === "travla2026") {
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'grid';
   } else {
@@ -250,7 +262,7 @@ function unlockOperatorConsole(event) {
   }
 }
 
-/* ========== OPERATOR CONSOLE FUNCTIONAL LOGIC ========== */
+/* ========== OPERATOR CONSOLE ASSET FUNCTIONALITY ========== */
 const files = document.getElementById("modFiles");
 const msg = document.getElementById("adminMsg");
 const queue = document.getElementById("queue");
@@ -274,31 +286,27 @@ function renderQueue(){
   publishBtn.disabled = selected.length === 0;
 }
 
-if(files) {
-  files.addEventListener("change", () => {
-    msg.textContent = "";
-    for (const f of files.files){
-      if (selected.length >= CONFIG.maxVideosPerModule){
-        msg.textContent = "Limit reached: a module holds at most " + CONFIG.maxVideosPerModule + " videos.";
-        break;
-      }
-      selected.push(f);
+files.addEventListener("change", () => {
+  msg.textContent = "";
+  for (const f of files.files){
+    if (selected.length >= CONFIG.maxVideosPerModule){
+      msg.textContent = "Limit reached: a module holds at most " + CONFIG.maxVideosPerModule + " videos. Extra files were skipped.";
+      break;
     }
-    files.value = "";
-    renderQueue();
-  });
-}
+    selected.push(f);
+  }
+  files.value = "";
+  renderQueue();
+});
 
-if(publishBtn) {
-  publishBtn.addEventListener("click", () => {
-    const title = document.getElementById("modTitle").value.trim();
-    if (!title){ msg.textContent = "Enter a module title before publishing."; return; }
-    msg.style.color = "var(--green)";
-    msg.textContent = "Mock publish: \"" + title + "\" with " + selected.length + " video(s).";
-    selected = []; renderQueue();
-    setTimeout(() => { msg.style.color = ""; }, 4000);
-  });
-}
+publishBtn.addEventListener("click", () => {
+  const title = document.getElementById("modTitle").value.trim();
+  if (!title){ msg.textContent = "Enter a module title before publishing."; return; }
+  msg.style.color = "var(--green)";
+  msg.textContent = "Mock publish: \"" + title + "\" with " + selected.length + " video(s). Connect a real backend to store files.";
+  selected = []; renderQueue();
+  setTimeout(() => { msg.style.color = ""; }, 4000);
+});
 </script>
 </body>
 </html>
