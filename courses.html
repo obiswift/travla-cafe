@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses — Travia Cafe</title>
+    <style>
+        :root {
+            --bg-color: #0b0f0e;
+            --card-bg: #121816;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #1f2923;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.95rem;
+        }
+        nav a:hover, nav a.active {
+            color: var(--accent-green);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-green);
+            background: rgba(34, 197, 94, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            width: fit-content;
+        }
+        .card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.25rem;
+        }
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .toggle-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--accent-green);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            width: 100%;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        .toggle-btn:hover {
+            background: rgba(34, 197, 94, 0.05);
+        }
+        .topics-list {
+            display: none;
+            margin-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 1rem;
+        }
+        .topic-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            padding: 0.4rem 0;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .topic-item a {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-color);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+        }
+        .topic-item a:hover {
+            background: rgba(34, 197, 94, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-weight: bold; color: var(--accent-green);">Travia Cafe</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="courses.html" class="active">Courses</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Cyber Security Roadmap & Courses</h1>
+        <p class="subtitle">Complete roadmap from zero knowledge to advanced level. Expand any module to see subtopics and direct YouTube tutorials.</p>
+
+        <div class="grid">
+            <!-- Course 1: Computer Fundamentals -->
+            <div class="card">
+                <div>
+                    <span class="badge">Beginner</span>
+                    <h3>Computer Fundamentals</h3>
+                    <p>Start from scratch — learn computer architecture, memory management, and operating system internals.</p>
+                </div>
+                <div class="meta">
+                    <span>3 modules</span>
+                    <span>4 hours</span>
+                    <span>22 topics</span>
+                </div>
+                <button class="toggle-btn" onclick="toggleTopics('fund-topics', this)">View All Topics</button>
+                <div id="fund-topics" class="topics-list">
+                    <div class="topic-item">
+                        <span>Von Neumann Architecture</span>
+                        <a href="https://www.youtube.com/results?search_query=Von+Neumann+Architecture" target="_blank">Search</a>
+                    </div>
+                    <div class="topic-item">
+                        <span>Harvard Architecture</span>
+                        <a href="https://www.youtube.com/results?search_query=Harvard+Architecture" target="_blank">Search</a>
+                    </div>
+                    <div class="topic-item">
+                        <span>CPU Structure & Registers</span>
+                        <a href="https://www.youtube.com/results?search_query=CPU+structure+ALU+CU+Registers" target="_blank">Search</a>
+                    </div>
+                    <div class="topic-item">
+                        <span>Instruction Cycle (Fetch-Decode-Execute)</span>
+                        <a href="https://www.youtube.com/results?search_query=Instruction+cycle+Fetch+Decode+Execute" target="_blank">Search</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 2: Networking -->
+            <div class="card">
+                <div>
+                    <span class="badge">Beginner</span>
+                    <h3>Networking</h3>
+                    <p>From OSI model to protocols — build a solid networking foundation for security and attacks.</p>
+                </div>
+                <div class="meta">
+                    <span>5 modules</span>
+                    <span>6 hours</span>
+                    <span>30 topics</span>
+                </div>
+                <button class="toggle-btn" onclick="toggleTopics('net-topics', this)">View All Topics</button>
+                <div id="net-topics" class="topics-list">
+                    <div class="topic-item">
+                        <span>OSI & TCP/IP Models</span>
+                        <a href="https://www.youtube.com/results?search_query=OSI+and+TCP+IP+models" target="_blank">Search</a>
+                    </div>
+                    <div class="topic-item">
+                        <span>IP Addressing & Subnetting</span>
+                        <a href="https://www.youtube.com/results?search_query=IP+addressing+and+subnetting" target="_blank">Search</a>
+                    </div>
+                    <div class="topic-item">
+                        <span>DNS, DHCP & HTTP/HTTPS Protocols</span>
+                        <a href="https://www.youtube.com/results?search_query=DNS+DHCP+HTTP+protocols" target="_blank">Search</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 3: Linux for Hackers -->
+            <div class="card">
+                <div>
+                    <span class="badge">Beginner</span>
+                    <h3>Linux for Hackers</h3>
+                    <p>Linux commands, file permissions, and bash scripting — the backbone of penetration testing.</p>
+                </div>
+                <div class="meta">
+                    <span>5 modules</span>
+                    <span>5 hours</span>
+                    <span>22 topics</span>
+                </div>
+                <button class="toggle-btn" onclick="toggleTopics('linux-topics', this)">View All Topics</button>
+                <div id="linux-topics" class="topics-list">
+                    <div class="topic-item">
+                        <span>Linux File System Hierarchy</span>
+                        <a href="https://www.youtube.com/results?search_query=Linux+file+system+hierarchy" target="_blank">Search</a>
+                    </div>
+                    <div class="topic-item">
+                        <span>Permissions & SUID/SGID Bits</span>
+                        <a href="https://www.youtube.com/results?search_query=Linux+permissions+SUID+SGID" target="_blank">Search</a>
+                    </div>
+                    <div class="topic-item">
+                        <span>Bash Scripting Basics</span>
+                        <a href="https://www.youtube.com/results?search_query=Bash+scripting+for+beginners" target="_blank">Search</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTopics(id, btn) {
+            const list = document.getElementById(id);
+            if (list.style.display === "block") {
+                list.style.display = "none";
+                btn.innerText = "View All Topics";
+            } else {
+                list.style.display = "block";
+                btn.innerText = "Hide Topics";
+            }
+        }
+    </script>
+</body>
+</html>
