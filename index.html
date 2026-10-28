@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Travia Cafe — Cybersecurity Courses in Kenya</title>
-<meta name="description" content="Practical cybersecurity training — self-paced, live online, or in person.">
+<title>travla_cafe | Cybersecurity Training, Nairobi</title>
+<meta name="description" content="Hands-on cybersecurity training in Nairobi: in-person classes, live Zoom sessions and secure pre-recorded modules.">
 <style>
 /* ========== DESIGN TOKENS ========== */
 :root{
@@ -15,6 +15,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--green);font-family:var(--font);line-height:1.6;font-size:15px;
+  /* subtle scanlines */
   background-image:repeating-linear-gradient(0deg,rgba(57,255,122,.03) 0 1px,transparent 1px 3px)}
 a{color:var(--green)}
 :focus-visible{outline:2px solid var(--green);outline-offset:3px}
@@ -30,178 +31,281 @@ header .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justif
 .brand{font-size:1.5rem;font-weight:700;text-shadow:0 0 12px rgba(57,255,122,.6)}
 .cursor{display:inline-block;width:.6ch;background:var(--green);animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
-.nav-links{display:flex;align-items:center;gap:20px;font-size:.9rem}
-.nav-links a{text-decoration:none;color:var(--muted)}
-.nav-links a:hover{color:var(--green)}
+.contact{display:flex;flex-wrap:wrap;gap:4px 20px;font-size:.9rem}
+.contact a{text-decoration:none;color:var(--muted)}
+.contact a:hover{color:var(--green)}
 
 /* ========== HERO ========== */
 .hero{padding:56px 0 40px}
-.hero h1{font-size:clamp(1.6rem,5vw,2.6rem);line-height:1.2;margin-bottom:14px}
+.hero h1{font-size:clamp(1.6rem,5vw,2.6rem);line-height:1.2;margin-bottom:14px;min-height:2.4em}
 .hero p{color:var(--muted);max-width:60ch;margin-bottom:22px}
 .btn{display:inline-block;font:inherit;background:transparent;color:var(--green);border:1px solid var(--green);
   padding:10px 20px;cursor:pointer;text-decoration:none}
 .btn:hover{background:var(--green);color:var(--bg)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
 
-/* ========== COURSES ROADMAP ========== */
-.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+/* ========== PRICING ========== */
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
 .card{background:var(--panel);border:1px solid var(--line);padding:22px;display:flex;flex-direction:column;gap:10px}
 .card:hover{border-color:var(--green-dim)}
 .card h3{font-size:1.05rem}
-.badge-level{display:inline-block;font-size:0.75rem;text-transform:uppercase;color:var(--green);background:rgba(57,255,122,0.1);padding:0.25rem 0.5rem;border-radius:4px;width:fit-content}
-.toggle-btn{background:transparent;border:1px solid var(--line);color:var(--green);padding:0.5rem 1rem;border-radius:4px;cursor:pointer;font-size:0.85rem;width:100%;text-align:center;margin-top:auto;font-family:var(--font)}
-.toggle-btn:hover{background:rgba(57,255,122,0.05);border-color:var(--green)}
-.topics-list{display:none;margin-top:0.5rem;border-top:1px dashed var(--line);padding-top:0.75rem}
-.topic-item{display:flex;justify-content:space-between;align-items:center;font-size:0.85rem;padding:0.3rem 0;color:var(--muted)}
-.topic-item a{color:var(--green);text-decoration:none;font-size:0.75rem;border:1px solid var(--line);padding:0.1rem 0.4rem;border-radius:3px}
-.topic-item a:hover{background:rgba(57,255,122,0.1)}
+.price{font-size:1.7rem;font-weight:700}
+.price small{font-size:.8rem;color:var(--muted);font-weight:400}
+.card ul{list-style:none;color:var(--muted);font-size:.9rem}
+.card li::before{content:"> ";color:var(--green-dim)}
 
-/* ========== FORMS & FOOTER ========== */
-form{background:var(--panel);border:1px solid var(--line);padding:24px;display:grid;gap:16px;max-width:640px}
+/* ========== ZOOM PROTOCOL ========== */
+.steps{list-style:none;counter-reset:s;display:grid;gap:12px}
+.steps li{counter-increment:s;background:var(--panel);border-left:3px solid var(--green);padding:14px 16px}
+.steps li::before{content:"step_" counter(s) ": ";color:var(--green-dim);font-weight:700}
+.notice{margin-top:18px;border:1px solid var(--warn);color:var(--warn);padding:12px 16px;font-size:.9rem}
+
+/* ========== FORMS ========== */
+form,.panel{background:var(--panel);border:1px solid var(--line);padding:24px;display:grid;gap:16px;max-width:640px}
 label{display:grid;gap:6px;font-size:.9rem}
 input,select{font:inherit;background:var(--bg);color:var(--green);border:1px solid var(--line);padding:10px;width:100%}
+input::placeholder{color:#3f7a54}
+input:focus,select:focus{border-color:var(--green)}
+.err{color:var(--err);font-size:.8rem;min-height:1em}
+select option{background:var(--bg)}
+
+/* payment instruction output */
+#payment{display:none;margin-top:22px;max-width:640px;border:1px solid var(--green);padding:20px;background:var(--panel);
+  box-shadow:0 0 18px rgba(57,255,122,.15)}
+#payment h3{margin-bottom:10px}
+#payment ol{margin:10px 0 0 20px}
+#payment .ref{color:var(--warn)}
+
+/* ========== ADMIN ========== */
+.badge{display:inline-block;border:1px solid var(--warn);color:var(--warn);padding:2px 8px;font-size:.75rem;margin-bottom:12px}
+.queue{list-style:none;display:grid;gap:6px;font-size:.88rem}
+.queue li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dotted var(--line);padding:4px 0}
+.queue button{background:none;border:0;color:var(--err);font:inherit;cursor:pointer}
+.meter{height:6px;background:var(--bg);border:1px solid var(--line)}
+.meter span{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
+#adminPanel{display:none}
+
 footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:.85rem;text-align:center}
+@media (prefers-reduced-motion:reduce){.cursor{animation:none}html{scroll-behavior:auto}.meter span{transition:none}}
 </style>
 </head>
 <body>
 
+<!-- ========== 1. HEADER ========== -->
 <header>
   <div class="wrap">
     <div class="brand">travla_cafe<span class="cursor">&nbsp;</span></div>
-    <div class="nav-links">
-      <a href="#courses">Free Courses</a>
-      <a href="#reserve">Enrol</a>
-      <a href="tel:+254703830466">0703830466</a>
+    <div class="contact">
+      <a href="tel:+254703830466">+254 703 830 466</a>
+      <a href="mailto:obimikaelmichael@gmail.com">obimikaelmichael@gmail.com</a>
     </div>
   </div>
 </header>
 
 <main class="wrap">
+
+  <!-- Hero: typed headline (JS) -->
   <div class="hero">
-    <h1>Learn to protect systems, networks and data.</h1>
-    <p>Practical cybersecurity training — self-paced, live online, or in person.</p>
-    <a class="btn" href="#courses">Explore Free Courses</a>
+    <h1 id="typed" aria-label="Learn to break it. Learn to defend it.">&nbsp;</h1>
+    <p>Practical cybersecurity training from Nairobi, Kenya. Learn in a room, live on Zoom, or on your own schedule with secure recorded modules.</p>
+    <a class="btn" href="#reserve">Reserve a seat</a>
   </div>
 
-  <!-- ========== FREE COURSES ROADMAP SECTION ========== -->
-  <section id="courses">
-    <h2>free_cybersecurity_roadmap</h2>
-    <p class="sub">Complete structured curriculum from beginner computer fundamentals to advanced offensive security. Expand any module to view topics and direct YouTube tutorials.</p>
-    
+  <!-- ========== 2. TRAINING VECTORS & PRICING ========== -->
+  <section id="vectors">
+    <h2>training_vectors</h2>
+    <p class="sub">Pick the format that fits your schedule. All prices are in Kenyan shillings (KES).</p>
     <div class="grid">
-      <!-- 1. Computer Fundamentals -->
-      <div class="card">
-        <div>
-          <span class="badge-level">Beginner</span>
-          <h3 style="margin-top:8px;">Computer Fundamentals</h3>
-          <p style="color:var(--muted); font-size:0.9rem; margin:6px 0;">Architecture, memory management, and OS internals.</p>
-        </div>
-        <button class="toggle-btn" onclick="toggleTopics('t1', this)">View All Topics</button>
-        <div id="t1" class="topics-list">
-          <div class="topic-item"><span>Von Neumann Architecture</span><a href="https://www.youtube.com/results?search_query=Von+Neumann+Architecture" target="_blank">Search</a></div>
-          <div class="topic-item"><span>CPU Structure & Registers</span><a href="https://www.youtube.com/results?search_query=CPU+structure+ALU+CU+Registers" target="_blank">Search</a></div>
-          <div class="topic-item"><span>Instruction Cycle</span><a href="https://www.youtube.com/results?search_query=Instruction+cycle+Fetch+Decode+Execute" target="_blank">Search</a></div>
-        </div>
-      </div>
+      <article class="card">
+        <h3>In-Person Practical Classes</h3>
+        <div class="price">KES 2,000 <small>/ physical session</small></div>
+        <ul><li>Nairobi HQ</li><li>Hands-on lab work</li></ul>
+      </article>
+      <article class="card">
+        <h3>Live Zoom Sessions</h3>
+        <div class="price">KES 1,500 <small>/ live session</small></div>
+        <ul><li>Synchronous, instructor-led</li><li>Strict pre-scheduled timetable</li><li>Email-verified link after payment</li></ul>
+      </article>
+      <article class="card">
+        <h3>Secure Pre-Recorded Modules</h3>
+        <div class="price">KES 800 <small>/ module</small></div>
+        <ul><li>Asynchronous, learn any time</li><li>Max 3 comprehensive videos per module</li></ul>
+      </article>
+    </div>
+  </section>
 
-      <!-- 2. Number System -->
-      <div class="card">
-        <div>
-          <span class="badge-level">Beginner</span>
-          <h3 style="margin-top:8px;">Number System</h3>
-          <p style="color:var(--muted); font-size:0.9rem; margin:6px 0;">Binary, Hexadecimal, and ASCII foundations.</p>
-        </div>
-        <button class="toggle-btn" onclick="toggleTopics('t2', this)">View All Topics</button>
-        <div id="t2" class="topics-list">
-          <div class="topic-item"><span>Decimal & Binary</span><a href="https://www.youtube.com/results?search_query=Decimal+and+Binary+number+systems" target="_blank">Search</a></div>
-          <div class="topic-item"><span>Hexadecimal Conversion</span><a href="https://www.youtube.com/results?search_query=Hexadecimal+base+conversion+computer+science" target="_blank">Search</a></div>
-        </div>
-      </div>
+  <!-- ========== 3. ZOOM PROTOCOL ========== -->
+  <section id="zoom">
+    <h2>zoom_protocol</h2>
+    <p class="sub">Live sessions run on a fixed timetable. Here is exactly how access works.</p>
+    <ol class="steps">
+      <li>Sessions follow a strict pre-scheduled timetable. We do not add or move sessions on request.</li>
+      <li>Reserve your session with the form below and pay via M-PESA Till.</li>
+      <li>We confirm your payment manually, then email you a verified Zoom link.</li>
+      <li>The link goes only to the email you registered. Do not share it.</li>
+      <li>Join on time. Sessions start at the scheduled hour.</li>
+    </ol>
+    <div class="notice">No payment, no link. Check your spam folder if the email does not arrive; contact us if it is still missing.</div>
+  </section>
 
-      <!-- 3. Networking -->
-      <div class="card">
-        <div>
-          <span class="badge-level">Beginner</span>
-          <h3 style="margin-top:8px;">Networking</h3>
-          <p style="color:var(--muted); font-size:0.9rem; margin:6px 0;">OSI model, protocols, and IP addressing essentials.</p>
-        </div>
-        <button class="toggle-btn" onclick="toggleTopics('t3', this)">View All Topics</button>
-        <div id="t3" class="topics-list">
-          <div class="topic-item"><span>OSI & TCP/IP Models</span><a href="https://www.youtube.com/results?search_query=OSI+and+TCP+IP+models" target="_blank">Search</a></div>
-          <div class="topic-item"><span>IP Addressing & Subnetting</span><a href="https://www.youtube.com/results?search_query=IP+addressing+and+subnetting" target="_blank">Search</a></div>
-        </div>
-      </div>
+   <!-- ========== 3. SECURE ONBOARDING & RESERVATION ========== -->
+  <section id="reserve">
+    <h2>secure_onboarding</h2>
+    <p>Fill in your details and choose a vector. Payment instructions appear after you submit.</p>
+    
+    <!-- Active Formspree backend link to save data straight to your email dashboard -->
+    <form id="reservationForm" action="https://formspree.io" method="POST" onsubmit="showPaymentInstructions(event)">
+      <label>Full name:
+        <input type="text" name="name" required placeholder="John Doe">
+      </label>
+      <label>Email:
+        <input type="email" name="email" required placeholder="operator@secure.mail">
+      </label>
+      <label>Phone (E.164 format):
+        <input type="tel" name="phone" required placeholder="+254 7XX XXX XXX">
+      </label>
+      <label>Training vector:
+        <select name="vector" id="vectorSelection" required>
+          <option value="in-person">In-Person Practical (KES 2,000 / session)</option>
+          <option value="zoom">Live Zoom Session (KES 1,500 / session)</option>
+          <option value="pre-recorded">Pre-Recorded Module (KES 800 / module)</option>
+        </select>
+      </label>
+      <button type="submit" class="btn">Reserve and show payment steps</button>
+    </form>
 
-      <!-- 4. Linux for Hackers -->
-      <div class="card">
-        <div>
-          <span class="badge-level">Beginner</span>
-          <h3 style="margin-top:8px;">Linux for Hackers</h3>
-          <p style="color:var(--muted); font-size:0.9rem; margin:6px 0;">Commands, permissions, and bash scripting.</p>
-        </div>
-        <button class="toggle-btn" onclick="toggleTopics('t4', this)">View All Topics</button>
-        <div id="t4" class="topics-list">
-          <div class="topic-item"><span>Linux File System</span><a href="https://www.youtube.com/results?search_query=Linux+file+system+hierarchy" target="_blank">Search</a></div>
-          <div class="topic-item"><span>Permissions & SUID/SGID</span><a href="https://www.youtube.com/results?search_query=Linux+permissions+SUID+SGID" target="_blank">Search</a></div>
-        </div>
-      </div>
+    <!-- Pre-styled M-PESA payment notification layer -->
+    <div id="payment" style="display:none;">
+      <h3>💳 LIPA NA M-PESA INSTRUCTIONS</h3>
+      <p>Your registration details have been securely logged.</p>
+      <ol>
+        <li>Go to your M-PESA menu or Safaricom App.</li>
+        <li>Select <strong>Lipa na M-PESA</strong> &gt; <strong>Buy Goods and Services</strong>.</li>
+        <li>Enter Till Number: <strong style="color:var(--warn);">[YOUR_TILL_NUMBER_HERE]</strong></li>
+        <li>Pay the exact amount matching your chosen course option.</li>
+      </ol>
+      <p class="notice">🚨 Note: Use the exact mobile number you registered with above. Your verified access code/schedule will be sent via email within 1 hour.</p>
+    </div>
+  </section>
 
-      <!-- 5. Python for Hackers -->
-      <div class="card">
-        <div>
-          <span class="badge-level">Intermediate</span>
-          <h3 style="margin-top:8px;">Python for Hackers</h3>
-          <p style="color:var(--muted); font-size:0.9rem; margin:6px 0;">Build custom tools and automation scripts.</p>
-        </div>
-        <button class="toggle-btn" onclick="toggleTopics('t5', this)">View All Topics</button>
-        <div id="t5" class="topics-list">
-          <div class="topic-item"><span>Python Automation Basics</span><a href="https://www.youtube.com/results?search_query=Python+automation+for+cybersecurity" target="_blank">Search</a></div>
-          <div class="topic-item"><span>Building a Port Scanner</span><a href="https://www.youtube.com/results?search_query=Build+port+scanner+python" target="_blank">Search</a></div>
-        </div>
-      </div>
+  <!-- ========== 4. OPERATOR_CONSOLE (PASSWORD SHIELDED) ========== -->
+  <section id="admin" style="margin-top:60px; border-top:1px dashed var(--line); padding-top:40px;">
+    <h2>operator_console</h2>
+    
+    <!-- Login interface shield -->
+    <form id="adminLogin" onsubmit="unlockOperatorConsole(event)">
+      <p class="ref" style="color:var(--err); margin-bottom:10px;">⚠️ RESTRICTED AREA: OPERATOR AUTHENTICATION REQUIRED</p>
+      <label>Enter Access Key:
+        <input type="password" id="adminPasswordInput" placeholder="••••••••••••" style="max-width:300px; display:inline-block; margin-right:10px;" required>
+      </label>
+      <button type="submit" class="btn" style="padding:10px 20px;">Unlock</button>
+    </form>
 
-      <!-- 6. Web Exploitation -->
-      <div class="card">
-        <div>
-          <span class="badge-level">Intermediate</span>
-          <h3 style="margin-top:8px;">Web Exploitation</h3>
-          <p style="color:var(--muted); font-size:0.9rem; margin:6px 0;">OWASP Top 10: SQL Injection and XSS attacks.</p>
+    <!-- System Console Panel: Hooks perfectly into your pre-existing page style elements -->
+    <div id="adminPanel" style="display:none;">
+      <span class="badge">🔓 ROOT ACCESS GRANTED</span>
+      <h3>Video Asset Upload System</h3>
+      <div class="panel" style="margin-top:15px;">
+        <label>Enter Module Title:
+          <input type="text" id="modTitle" placeholder="e.g., Module 01 - Basics" required>
+        </label>
+        <label>Videos (Max 3, MP4 format):
+          <input type="file" id="modFiles" multiple accept="video/mp4">
+        </label>
+        
+        <p id="adminMsg" class="err" style="color:var(--warn); min-height:1.2em;"></p>
+        
+        <div style="margin:10px 0;">
+          <span style="font-size:0.85rem; color:var(--muted);">Module Video Capacity Max (3 vids):</span>
+          <div class="meter" style="margin-top:5px;"><span id="meterFill" style="width:0%;"></span></div>
         </div>
-        <button class="toggle-btn" onclick="toggleTopics('t6', this)">View All Topics</button>
-        <div id="t6" class="topics-list">
-          <div class="topic-item"><span>SQL Injection (SQLi)</span><a href="https://www.youtube.com/results?search_query=SQL+injection+tutorial+web+security" target="_blank">Search</a></div>
-          <div class="topic-item"><span>Cross-Site Scripting (XSS)</span><a href="https://www.youtube.com/results?search_query=Cross+site+scripting+XSS+tutorial" target="_blank">Search</a></div>
-        </div>
+
+        <ul id="queue" class="queue"></ul>
+        <button id="publishBtn" type="button" class="btn" disabled>Publish Module Assets</button>
       </div>
     </div>
   </section>
 
-  <!-- ========== ENROL SECTION ========== -->
-  <section id="reserve">
-    <h2>secure_onboarding</h2>
-    <form id="reservationForm" action="https://formspree.io" method="POST">
-      <label>Full name: <input type="text" name="name" required placeholder="John Doe"></label>
-      <label>Email: <input type="email" name="email" required placeholder="operator@secure.mail"></label>
-      <label>Phone: <input type="tel" name="phone" required placeholder="+254 7XX XXX XXX"></label>
-      <button type="submit" class="btn">Proceed to Enrol</button>
-    </form>
-  </section>
 </main>
 
 <footer>
-  <div class="wrap">travla_cafe · Nairobi, Kenya · obimikaelmichael@gmail.com</div>
+  <div class="wrap">
+    travla_cafe · Nairobi, Kenya · <layout>followupButton(query="""Draft an email to obimikaelmichael@gmail.com""", label="""obimikaelmichael@gmail.com""", variant=FOLLOWUP_BUTTON_VARIANT_EMAIL_DROPDOWN)</layout>
+  </div>
 </footer>
 
+<!-- ========== 5. DYNAMIC FUNCTIONAL LOGIC ========== -->
 <script>
-function toggleTopics(id, btn) {
-  const list = document.getElementById(id);
-  if (list.style.display === "block") {
-    list.style.display = "none";
-    btn.innerText = "View All Topics";
+const CONFIG = { maxVideosPerModule: 3 };
+
+// Open M-PESA box on payment submission
+function showPaymentInstructions(event) {
+  // If you want to test the checkout loop visuals locally without running form servers, uncomment the next line:
+  // event.preventDefault();
+  const payBox = document.getElementById('payment');
+  payBox.style.display = 'block';
+  payBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Security Gatekeeper logic protecting your core upload node
+function unlockOperatorConsole(event) {
+  event.preventDefault();
+  const secretKey = document.getElementById('adminPasswordInput').value;
+  
+  // Your private operational key passphrase
+  if (secretKey === "travla2026") {
+    document.getElementById('adminLogin').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'grid';
   } else {
-    list.style.display = "block";
-    btn.innerText = "Hide Topics";
+    alert("CRITICAL ERROR: Invalid Cryptographic Access Key.");
   }
 }
+
+/* ========== OPERATOR CONSOLE ASSET FUNCTIONALITY ========== */
+const files = document.getElementById("modFiles");
+const msg = document.getElementById("adminMsg");
+const queue = document.getElementById("queue");
+const publishBtn = document.getElementById("publishBtn");
+const meter = document.getElementById("meterFill");
+let selected = [];
+
+function renderQueue(){
+  queue.innerHTML = "";
+  selected.forEach((f, idx) => {
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    span.textContent = f.name + " (" + (f.size/1048576).toFixed(1) + " MB)";
+    const rm = document.createElement("button");
+    rm.type = "button"; rm.textContent = "remove";
+    rm.onclick = () => { selected.splice(idx,1); renderQueue(); };
+    li.append(span, rm);
+    queue.appendChild(li);
+  });
+  meter.style.width = (selected.length / CONFIG.maxVideosPerModule * 100) + "%";
+  publishBtn.disabled = selected.length === 0;
+}
+
+files.addEventListener("change", () => {
+  msg.textContent = "";
+  for (const f of files.files){
+    if (selected.length >= CONFIG.maxVideosPerModule){
+      msg.textContent = "Limit reached: a module holds at most " + CONFIG.maxVideosPerModule + " videos. Extra files were skipped.";
+      break;
+    }
+    selected.push(f);
+  }
+  files.value = "";
+  renderQueue();
+});
+
+publishBtn.addEventListener("click", () => {
+  const title = document.getElementById("modTitle").value.trim();
+  if (!title){ msg.textContent = "Enter a module title before publishing."; return; }
+  msg.style.color = "var(--green)";
+  msg.textContent = "Mock publish: \"" + title + "\" with " + selected.length + " video(s). Connect a real backend to store files.";
+  selected = []; renderQueue();
+  setTimeout(() => { msg.style.color = ""; }, 4000);
+});
 </script>
 </body>
 </html>
